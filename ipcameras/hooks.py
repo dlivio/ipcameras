@@ -19,7 +19,7 @@ app_license = "MIT"
 # app_include_js = "/assets/ipcameras/js/ipcameras.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/ipcameras/css/ipcameras.css"
+web_include_css = "/assets/ipcameras/css/index.css"
 # web_include_js = "/assets/ipcameras/js/ipcameras.js"
 
 # include js in page
@@ -50,6 +50,10 @@ app_license = "MIT"
 
 # automatically create page for each record of this doctype
 # website_generators = ["Web Page"]
+
+portal_menu_items = [
+    {"title": "IP Cameras", "route": "/ipcameras", "role": "Customer"},
+]
 
 # Installation
 # ------------
