@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include ipcameras *.css
+recursive-include ipcameras *.csv
+recursive-include ipcameras *.html
+recursive-include ipcameras *.ico
+recursive-include ipcameras *.js
+recursive-include ipcameras *.json
+recursive-include ipcameras *.md
+recursive-include ipcameras *.png
+recursive-include ipcameras *.py
+recursive-include ipcameras *.svg
+recursive-include ipcameras *.txt
+recursive-exclude ipcameras *.pyc
