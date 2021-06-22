@@ -1,0 +1,39 @@
+{
+ "creation": "2021-06-22 17:40:16.221491",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "box",
+  "name1",
+  "link"
+ ],
+ "fields": [
+  {
+   "fieldname": "box",
+   "fieldtype": "Int",
+   "label": "Box"
+  },
+  {
+   "fieldname": "name1",
+   "fieldtype": "Data",
+   "label": "Name"
+  },
+  {
+   "fieldname": "link",
+   "fieldtype": "Data",
+   "label": "Link"
+  }
+ ],
+ "istable": 1,
+ "modified": "2021-06-22 17:40:16.221491",
+ "modified_by": "Administrator",
+ "module": "IPCameras",
+ "name": "IPCamera Link",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
