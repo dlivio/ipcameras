@@ -1,0 +1,162 @@
+<!-- about.html -->
+{%  extends "templates/web.html" %}
+
+{% block title %}{{ _("IP Cameras") }}{% endblock %}
+
+{% block script %}
+<script src="assets/js/moment-bundle.min.js"></script>
+
+<script>
+    var executing = false;
+    var currentCamera = 1;
+
+    function selectCamera(selection) {
+        if (currentCamera !== selection) {
+            currentCamera = selection;
+            document.getElementById("stream").setAttribute('src', "http://localhost:3000/camera/" + currentCamera.toString());
+        }
+    }
+
+    function moveCamera(direction) {
+        if(!executing) executing = true;
+        
+        fetch("http://localhost:3000/move/start/" + direction)
+            .then(response => response.json())
+            .then(data => console.log(data));
+        
+    }
+
+    function stopCamera(direction) {
+        // only allow the stop command if a command is already executing
+        if(executing) {
+            fetch("http://localhost:3000/move/stop/" + direction)
+                .then(response => response.json())
+                .then(data => console.log(data));
+
+            executing = false;
+        }
+    }
+
+    function zoomCamera(direction) {
+        if(!executing) executing = true;
+
+        fetch("http://localhost:3000/zoom/start/" + direction)
+            .then(response => response.json())
+            .then(data => console.log(data));
+    }
+
+    function stopZoom(direction) {
+        // only allow the stop command if a command is already executing
+        if(executing) {
+            fetch("http://localhost:3000/zoom/stop/" + direction)
+                .then(response => response.json())
+                .then(data => console.log(data));
+
+            executing = false;
+        }
+    }
+</script>
+{% endblock %}
+
+{% block page_content %}
+<h1>{{ _("IP Cameras") }}</h1>
+
+<!-- Separator line -->
+<hr>
+
+<!-- Camera select -->
+<select class="custom-select custom-select-lg mb-9" name="cameras" id="cameras" style="width: auto;">
+    <option selected value="camera1" onclick="selectCamera(1)">Camera 1</option>
+    <option value="camera2" onclick="selectCamera(2)">Camera 2</option>
+    <option value="camera3" onclick="selectCamera(3)">Camera 3</option>
+    <option value="camera4" onclick="selectCamera(4)">Camera 4</option>
+</select>
+
+<div class="row">
+    <!-- Column with the youtube embed player -->
+    <div class="col-9 player-content">
+        <div class="video-container">
+            <img id="stream" onerror="if (this.src != '/assets/erpnext_youtube_ipcam/images/offline.png') this.src = '/assets/erpnext_youtube_ipcam/images/offline.png';" 
+                src="http://localhost:3000/camera/1"/>
+        </div>
+    </div>
+    <!-- Column with the controls of the IP Camera -->
+    <div class="col-3 player-content" style="margin: auto;">
+        <!-- Direction arrows -->
+        <div class="row camera-controls">
+            <!-- Left button column -->
+            <div class="btn-group-vertical">
+                <button type="submit" id="left-up" class="btn btn-outline-secondary" onmousedown="moveCamera('leftUp')" onmouseup="stopCamera('leftUp')" onmouseleave="stopCamera('leftUp')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1H3.707l10.147 10.146a.5.5 0 0 1-.708.708L3 3.707V8.5a.5.5 0 0 1-1 0v-6z"/>
+                    </svg>
+                </button>
+                <button type="submit" id="left" class="btn btn-outline-secondary" onmousedown="moveCamera('left')" onmouseup="stopCamera('left')" onmouseleave="stopCamera('left')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
+                </button>
+                <button type="submit" id="left-down" class="btn btn-outline-secondary" onmousedown="moveCamera('leftDown')" onmouseup="stopCamera('leftDown')" onmouseleave="stopCamera('leftDown')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2 13.5a.5.5 0 0 0 .5.5h6a.5.5 0 0 0 0-1H3.707L13.854 2.854a.5.5 0 0 0-.708-.708L3 12.293V7.5a.5.5 0 0 0-1 0v6z"/>
+                    </svg>
+                </button>
+            </div>
+            <!-- Middle button column -->
+            <div class="btn-group-vertical">
+                <button type="submit" id="up" class="btn btn-outline-secondary" onmousedown="moveCamera('up')" onmouseup="stopCamera('up')" onmouseleave="stopCamera('up')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                    </svg>
+                </button>
+                <div class="btn-group">
+                    <button type="submit" id="zoom-out" class="btn btn-primary" onmousedown="zoomCamera('out')" onmouseup="stopZoom('out')" onmouseleave="stopZoom('in')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
+                            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                        </svg>
+                    </button>
+                    <button type="submit" id="zoom-in" class="btn btn-primary" onmousedown="zoomCamera('in')" onmouseup="stopZoom('in')" onmouseleave="stopZoom('out')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                    </button>
+                </div>
+                <button type="submit" id="down" class="btn btn-outline-secondary" onmousedown="moveCamera('down')" onmouseup="stopCamera('down')" onmouseleave="stopCamera('down')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                    </svg>
+                </button>
+            </div>
+            <!-- Right button column -->
+            <div class="btn-group-vertical">
+                <button type="submit" id="right-up" class="btn btn-outline-secondary" onmousedown="moveCamera('rightUp')" onmouseup="stopCamera('rightUp')" onmouseleave="stopCamera('rightUp')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0v-6z"/>
+                    </svg>
+                </button>
+                <button type="submit" id="right" class="btn btn-outline-secondary" onmousedown="moveCamera('right')" onmouseup="stopCamera('right')" onmouseleave="stopCamera('right')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                    </svg>
+                </button>
+                <button type="submit" id="right-up" class="btn btn-outline-secondary" onmousedown="moveCamera('rightDown')" onmouseup="stopCamera('rightDown')" onmouseleave="stopCamera('rightDown')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M14 13.5a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1 0-1h4.793L2.146 2.854a.5.5 0 1 1 .708-.708L13 12.293V7.5a.5.5 0 0 1 1 0v6z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Separator line -->
+<hr>
+
+<h3>List of IP Cams</h3>
+<ol>
+{% for user in users %}
+	<li>{{ user.first_name }} {{ user.get("last_name", "") }}</li>
+{% endfor %}
+</ol>
+
+{% endblock %}
