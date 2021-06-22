@@ -91,6 +91,8 @@ portal_menu_items = [
 #	}
 # }
 
+fixtures = ["Custom Field"]
+
 # Scheduled Tasks
 # ---------------
 
