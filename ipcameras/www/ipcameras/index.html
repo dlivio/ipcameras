@@ -7,7 +7,7 @@
 
 <script>
     var executing = false;
-    var currentCamera = 0;
+    var currentCamera = "none"; // current camera ip
 
     var host = window.location.hostname;
 
@@ -16,7 +16,15 @@
     function selectCamera(selection) {
         console.log("Selected camera: " + selection);
         if (currentCamera !== selection) {
-            currentCamera = selection;
+            console.log("should be here");
+            // remove player and controls if there are no cameras
+            if($('#cameras option').length == 0) {
+                document.getElementById("cameras").style = "display: none";
+                document.getElementById("playerAndControls").style = "display: none";
+                document.getElementById("errorMessage").innerHTML = "No cameras were defined for your projects.";
+                return;
+            }
+            currentCamera = document.getElementById(selection).value;
             document.getElementById("stream").setAttribute('src', "http://" + host + ":3000/camera/" + currentCamera.toString());
         }
     }
@@ -60,7 +68,7 @@
         }
     }
 
-    window.addEventListener('load', selectCamera(1));
+    window.addEventListener('load', selectCamera("camera0"));
 
 </script>
 {% endblock %}
@@ -71,15 +79,17 @@
 <!-- Separator line -->
 <hr>
 
+<!-- In case there are no Cameras -->
+<span id="errorMessage"></span>
+
 <!-- Camera select -->
 <select class="custom-select custom-select-lg mb-9" name="cameras" id="cameras" style="width: auto;">
-    <option selected value="camera1" onclick="selectCamera(1)">Camera 1</option>
-    <option value="camera2" onclick="selectCamera(2)">Camera 2</option>
-    <option value="camera3" onclick="selectCamera(3)">Camera 3</option>
-    <option value="camera4" onclick="selectCamera(4)">Camera 4</option>
+    {% for element in links %}
+        <option id="camera{{ loop.index0 }}" value="{{ element.link }}" onclick="selectCamera(this.id)">{{ element.name1 }}</option>
+    {% endfor %}
 </select>
 
-<div class="row">
+<div class="row" id="playerAndControls">
     <!-- Column with the youtube embed player -->
     <div class="col-9 player-content">
         <div class="video-container">
@@ -161,8 +171,8 @@
 
 <h3>List of IP Cams</h3>
 <ol>
-{% for link in links %}
-	<li>{{ link }}</li>
+{% for element in links %}
+	<li>Box: {{ element.box }} Box: {{ element.name1 }} Box: {{ element.link }}</li>
 {% endfor %}
 </ol>
 

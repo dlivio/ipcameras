@@ -36,8 +36,8 @@ def get_current_user_links():
 		user = frappe.get_doc('User', email)
 
 		for element in user.ipcameras:
-			links.append(element.link)
-			print(element.link)
+			links.append(element)
+			#print(element)
 
 		return links
 	except (IndexError, frappe.DoesNotExistError):
