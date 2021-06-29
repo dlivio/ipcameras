@@ -15,7 +15,7 @@ def get_context(context):
 	print('OLA')
 	print(user.ipcam_links[0].link)
 	"""
-	#get_current_user_links()
+	get_current_user_links()
 	
 
 def get_current_user_links():
@@ -35,7 +35,7 @@ def get_current_user_links():
 	try:
 		user = frappe.get_doc('User', email)
 
-		for element in user.ipcam_links:
+		for element in user.ipcameras:
 			links.append(element.link)
 			print(element.link)
 

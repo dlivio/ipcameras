@@ -7,19 +7,24 @@
 
 <script>
     var executing = false;
-    var currentCamera = 1;
+    var currentCamera = 0;
+
+    var host = window.location.hostname;
+
+    console.log("current host is: " + host);
 
     function selectCamera(selection) {
+        console.log("Selected camera: " + selection);
         if (currentCamera !== selection) {
             currentCamera = selection;
-            document.getElementById("stream").setAttribute('src', "http://localhost:3000/camera/" + currentCamera.toString());
+            document.getElementById("stream").setAttribute('src', "http://" + host + ":3000/camera/" + currentCamera.toString());
         }
     }
 
     function moveCamera(direction) {
         if(!executing) executing = true;
         
-        fetch("http://localhost:3000/move/start/" + direction)
+        fetch("http://" + host + ":3000/move/start/" + direction)
             .then(response => response.json())
             .then(data => console.log(data));
         
@@ -28,7 +33,7 @@
     function stopCamera(direction) {
         // only allow the stop command if a command is already executing
         if(executing) {
-            fetch("http://localhost:3000/move/stop/" + direction)
+            fetch("http://" + host + ":3000/move/stop/" + direction)
                 .then(response => response.json())
                 .then(data => console.log(data));
 
@@ -39,7 +44,7 @@
     function zoomCamera(direction) {
         if(!executing) executing = true;
 
-        fetch("http://localhost:3000/zoom/start/" + direction)
+        fetch("http://" + host + ":3000/zoom/start/" + direction)
             .then(response => response.json())
             .then(data => console.log(data));
     }
@@ -47,13 +52,16 @@
     function stopZoom(direction) {
         // only allow the stop command if a command is already executing
         if(executing) {
-            fetch("http://localhost:3000/zoom/stop/" + direction)
+            fetch("http://" + host + ":3000/zoom/stop/" + direction)
                 .then(response => response.json())
                 .then(data => console.log(data));
 
             executing = false;
         }
     }
+
+    window.addEventListener('load', selectCamera(1));
+
 </script>
 {% endblock %}
 
@@ -76,7 +84,7 @@
     <div class="col-9 player-content">
         <div class="video-container">
             <img id="stream" onerror="if (this.src != '/assets/ipcameras/images/offline.png') this.src = '/assets/ipcameras/images/offline.png';" 
-                src="http://localhost:3000/camera/1"/>
+                src='/assets/ipcameras/images/loading.png'/>
         </div>
     </div>
     <!-- Column with the controls of the IP Camera -->
