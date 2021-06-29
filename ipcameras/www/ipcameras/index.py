@@ -15,7 +15,7 @@ def get_context(context):
 	print('OLA')
 	print(user.ipcam_links[0].link)
 	"""
-	get_current_user_links()
+	context.links = get_current_user_links()
 	
 
 def get_current_user_links():

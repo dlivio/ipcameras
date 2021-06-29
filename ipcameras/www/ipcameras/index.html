@@ -161,8 +161,8 @@
 
 <h3>List of IP Cams</h3>
 <ol>
-{% for user in users %}
-	<li>{{ user.first_name }} {{ user.get("last_name", "") }}</li>
+{% for link in links %}
+	<li>{{ link }}</li>
 {% endfor %}
 </ol>
 
