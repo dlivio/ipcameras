@@ -30,7 +30,7 @@ def get_current_user_links():
 	if email in ('Administrator', 'Guest'):
 		return None
 	
-	print('OLA')
+	#print('Following links were found:')
 	
 	try:
 		user = frappe.get_doc('User', email)

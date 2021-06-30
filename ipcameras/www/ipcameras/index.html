@@ -19,9 +19,9 @@
             console.log("should be here");
             // remove player and controls if there are no cameras
             if($('#cameras option').length == 0) {
-                document.getElementById("cameras").style = "display: none";
-                document.getElementById("playerAndControls").style = "display: none";
-                document.getElementById("errorMessage").innerHTML = "No cameras were defined for your projects.";
+                document.getElementById("cameras").style = "display: none"; // removes the cameras select
+                document.getElementById("playerAndControls").style = "display: none"; // removes the stream and controls
+                document.getElementById("errorMessage").innerHTML = "No cameras were defined for your projects."; // adds a error message to the screen
                 return;
             }
             currentCamera = document.getElementById(selection).value;
@@ -68,6 +68,7 @@
         }
     }
 
+    // on page load, load the first stream available in the list
     window.addEventListener('load', selectCamera("camera0"));
 
 </script>
@@ -89,8 +90,9 @@
     {% endfor %}
 </select>
 
+<!-- IPCamera stream and controls -->
 <div class="row" id="playerAndControls">
-    <!-- Column with the youtube embed player -->
+    <!-- Column with the embed player -->
     <div class="col-9 player-content">
         <div class="video-container">
             <img id="stream" onerror="if (this.src != '/assets/ipcameras/images/offline.png') this.src = '/assets/ipcameras/images/offline.png';" 
@@ -169,7 +171,7 @@
 <!-- Separator line -->
 <hr>
 
-<h3>List of IP Cams</h3>
+<h3>Debug List of IP Cams</h3>
 <ol>
 {% for element in links %}
 	<li>Box: {{ element.box }} Box: {{ element.name1 }} Box: {{ element.link }}</li>
