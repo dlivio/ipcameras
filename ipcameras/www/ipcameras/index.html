@@ -8,6 +8,7 @@
 <script>
     var executing = false;
     var currentCamera = "none"; // current camera ip
+    var cameraIpForRequest = ""; // current camera ip without the '/'
 
     var host = window.location.hostname;
 
@@ -24,15 +25,16 @@
                 document.getElementById("errorMessage").innerHTML = "No cameras were defined for your projects."; // adds a error message to the screen
                 return;
             }
-            currentCamera = document.getElementById(selection).value;
-            document.getElementById("stream").setAttribute('src', "http://" + host + ":3000/camera/" + currentCamera.toString());
+            currentCamera = document.getElementById(selection).value.toString();
+            cameraIpForRequest = currentCamera.replaceAll(/\//g, "_");
+            document.getElementById("stream").setAttribute('src', "http://" + host + ":3000/camera/" + cameraIpForRequest);
         }
     }
 
     function moveCamera(direction) {
         if(!executing) executing = true;
         
-        fetch("http://" + host + ":3000/move/start/" + direction)
+        fetch("http://" + host + ":3000/" + cameraIpForRequest + "/move/start/" + direction)
             .then(response => response.json())
             .then(data => console.log(data));
         
@@ -41,7 +43,7 @@
     function stopCamera(direction) {
         // only allow the stop command if a command is already executing
         if(executing) {
-            fetch("http://" + host + ":3000/move/stop/" + direction)
+            fetch("http://" + host + ":3000/" + cameraIpForRequest + "/move/stop/" + direction)
                 .then(response => response.json())
                 .then(data => console.log(data));
 
@@ -52,7 +54,7 @@
     function zoomCamera(direction) {
         if(!executing) executing = true;
 
-        fetch("http://" + host + ":3000/zoom/start/" + direction)
+        fetch("http://" + host + ":3000/" + cameraIpForRequest + "/zoom/start/" + direction)
             .then(response => response.json())
             .then(data => console.log(data));
     }
@@ -60,7 +62,7 @@
     function stopZoom(direction) {
         // only allow the stop command if a command is already executing
         if(executing) {
-            fetch("http://" + host + ":3000/zoom/stop/" + direction)
+            fetch("http://" + host + ":3000/" + cameraIpForRequest + "/zoom/stop/" + direction)
                 .then(response => response.json())
                 .then(data => console.log(data));
 
@@ -167,15 +169,5 @@
         </div>
     </div>
 </div>
-
-<!-- Separator line -->
-<hr>
-
-<h3>Debug List of IP Cams</h3>
-<ol>
-{% for element in links %}
-	<li><b>Box: </b>{{ element.box }}, <b>Name: </b>{{ element.name1 }}, <b>IP: </b>{{ element.link }}</li>
-{% endfor %}
-</ol>
 
 {% endblock %}
