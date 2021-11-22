@@ -133,4 +133,3 @@ fixtures = ["Custom Field"]
 # 	"Task": "ipcameras.task.get_dashboard_data"
 # }
 
-template_apps = ['project_extension', 'erpnext'] # apps order is important
